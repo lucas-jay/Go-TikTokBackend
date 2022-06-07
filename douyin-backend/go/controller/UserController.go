@@ -3,6 +3,8 @@ package controller
 import (
 	//需要用到的结构体
 	"douyin-backend/go/entity"
+	"fmt"
+
 	//gin框架的依赖
 	"github.com/gin-gonic/gin"
 	//http连接包
@@ -34,23 +36,29 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var user *entity.User
-	err := c.BindJSON(user)
+
+	var user entity.User
+	//username := c.Query("username")
+	//fmt.Printf(username)
+	//password := c.Query("password")
+	err := c.BindJSON(&user)
 	if err != nil {
-		return
+		fmt.Printf(err.Error())
 	}
 
-	user, err2 := service.GetUserByName(user.Name)
+	fmt.Printf("22" + user.Name)
+
+	getUser, err2 := service.GetUserByName(user.Name)
 
 	if err2 != nil {
 		//fail
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err2.Error()})
 	} else {
 		//success
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
 			"msg":     2,
-			"user_id": user.Id,
+			"user_id": getUser.Id,
 			"token":   4,
 		})
 	}

@@ -11,7 +11,7 @@ func SetRouter() *gin.Engine {
 	/**
 	  用户User路由组
 	*/
-	userGroup := r.Group("/douyin/user")
+	userGroup := r.Group("douyin/user")
 	{
 		//注册
 		userGroup.POST("/register", controller.Register)
