@@ -46,9 +46,9 @@ func GetUserById(id string) (user *entity.User, err error) {
 /**
 根据id查询用户User
 */
-func GetUserByName(id string) (user *entity.User, err error) {
-	if err = dao.SqlSession.Where("name=?", id).First(user).Error; err != nil {
-		return nil, err
+func GetUserByName(name string) (user entity.User, err error) {
+	if err = dao.SqlSession.Where("name=?", name).First(&user).Error; err != nil {
+		return entity.User{}, err
 	}
 	return
 }

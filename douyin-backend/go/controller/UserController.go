@@ -3,8 +3,6 @@ package controller
 import (
 	//需要用到的结构体
 	"douyin-backend/go/entity"
-	"fmt"
-
 	//gin框架的依赖
 	"github.com/gin-gonic/gin"
 	//http连接包
@@ -38,35 +36,38 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 
 	var user entity.User
-	//username := c.Query("username")
-	//fmt.Printf(username)
-	//password := c.Query("password")
-	err := c.BindJSON(&user)
-	if err != nil {
-		fmt.Printf(err.Error())
-	}
+	user.Name = c.Query("username")
+	user.Password = c.Query("password")
 
-	fmt.Printf("22" + user.Name)
+	user, _ = service.GetUserByName(user.Name)
 
-	getUser, err2 := service.GetUserByName(user.Name)
-
-	if err2 != nil {
-		//fail
-		c.JSON(http.StatusBadRequest, gin.H{"error": err2.Error()})
-	} else {
-		//success
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"msg":     2,
-			"user_id": getUser.Id,
-			"token":   4,
-		})
-	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"msg":     2,
+		"user_id": user.Id,
+		"token":   4,
+	})
 
 }
 
 func UserInfo(c *gin.Context) {
+	var user entity.User
+	user, _ = service.GetUserByName("Lucas")
 
+	//user_id := c.Query("user_id")
+	//token := c.Query("token")
+
+	c.JSON(http.StatusOK, UserInfoResponse{
+		status_code: 0,
+		status_msg:  "ok",
+		user:        user,
+	})
+}
+
+type UserInfoResponse struct {
+	status_code int32
+	status_msg  string
+	user        entity.User
 }
 
 func GetUserList(c *gin.Context) {

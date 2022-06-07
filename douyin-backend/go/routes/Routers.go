@@ -14,11 +14,11 @@ func SetRouter() *gin.Engine {
 	userGroup := r.Group("douyin/user")
 	{
 		//注册
-		userGroup.POST("/register", controller.Register)
+		userGroup.POST("/register/", controller.Register)
 		//登录
-		userGroup.POST("/login", controller.Login)
+		userGroup.POST("/login/", controller.Login)
 		//用户信息
-		userGroup.POST("/", controller.UserInfo)
+		userGroup.GET("/", controller.UserInfo)
 
 		////修改某个User
 		//userGroup.PUT("/users/:id", controller.UpdateUser)
